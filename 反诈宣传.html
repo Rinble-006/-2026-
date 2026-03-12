@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园反诈场景模拟闯关</title>
+    <style>
+        * {margin: 0; padding: 0; box-sizing: border-box; font-family: "微软雅黑", sans-serif;}
+        body {background: #f0f2f5; padding: 20px;}
+        .container {max-width: 650px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(22, 93, 255, 0.1);}
+        h1 {color: #165dff; text-align: center; margin-bottom: 20px; font-size: 24px;}
+        .title-icon {font-size: 28px; margin-right: 10px;}
+        .game-box {margin-top: 20px;}
+        .scene {padding: 20px; border-radius: 10px; border: 2px solid #e5e7eb; margin-bottom: 25px; display: block;}
+        .scene h3 {color: #d32f2f; margin-bottom: 15px; font-size: 18px;}
+        .scene p {color: #333; line-height: 1.7; margin-bottom: 20px; font-size: 16px;}
+        .option {display: block; width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 16px; cursor: pointer; text-align: left; background: #fff;}
+        .option:hover {border-color: #165dff;}
+        .option.correct {background: #f1f8e9; border-color: #4caf50; color: #2e7d32;}
+        .option.wrong {background: #ffebee; border-color: #d32f2f; color: #d32f2f;}
+        .tip-box {padding: 15px; border-radius: 8px; margin-top: 15px; display: none;}
+        .correct-tip {background: #f1f8e9; border: 1px solid #c8e6c9; color: #2e7d32;}
+        .wrong-tip {background: #ffebee; border: 1px solid #ffcdd2; color: #d32f2f;}
+        .tip-box p {line-height: 1.8; font-size: 15px;}
+        #resultBox {margin-top: 30px; padding: 25px; border-radius: 10px; background: #e6f7ff; text-align: center; display: none;}
+        #resultBox h2 {color: #165dff; margin-bottom: 15px; font-size: 22px;}
+        #resultBox p {color: #333; line-height: 1.8; font-size: 17px; margin: 8px 0;}
+        #level {font-size: 24px; font-weight: bold; color: #d32f2f;}
+        .restart-btn {margin-top: 20px; padding: 12px 30px; background: #165dff; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;}
+        .restart-btn:hover {background: #0d47a1;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="title-icon">🛡️</span>校园反诈场景模拟闯关</h1>
+        <div class="game-box" id="gameBox">
+            <!-- 场景1：刷单返利 -->
+            <div class="scene" id="scene1">
+                <h3>场景1：刷单返利诈骗</h3>
+                <p>你在校园群看到有人发“刷单赚佣金，一单赚50，多刷多赚，先做小额单返利快”，并给了你一个二维码，你会？</p>
+                <button class="option" data-scene="1" data-ans="wrong">扫码加入，先做小额单试试，反正投入少</button>
+                <button class="option" data-scene="1" data-ans="correct">直接忽略，知道刷单是诈骗，举报该群聊</button>
+                <button class="option" data-scene="1" data-ans="wrong">犹豫一下，问同学要不要一起做，互相有个伴</button>
+                <div class="tip-box wrong-tip" id="tip1-w">
+                    <p>❌ 错误！刷单本身就是违法行为，骗子先以小额返利诱骗你，后续会让你加大投入，最后拉黑失联，切记“刷单都是诈骗”！</p>
+                </div>
+                <div class="tip-box correct-tip" id="tip1-c">
+                    <p>✅ 正确！校园刷单返利是高频诈骗，任何要求先垫付、做任务赚佣金的都是骗子，及时举报还能避免其他同学上当～</p>
+                </div>
+            </div>
+
+            <!-- 场景2：校园贷 -->
+            <div class="scene" id="scene2" style="display: none;">
+                <h3>场景2：校园贷诈骗</h3>
+                <p>你想买新手机，手头没钱，看到朋友圈有人发“校园低息贷，无抵押秒到账，只需身份证即可办理”，你会？</p>
+                <button class="option" data-scene="2" data-ans="wrong">联系对方，提供身份证办理，反正秒到账</button>
+                <button class="option" data-scene="2" data-ans="correct">拒绝办理，向学校辅导员求助，理性消费</button>
+                <button class="option" data-scene="2" data-ans="wrong">砍价试试，让对方再降低利息，合适就办</button>
+                <div class="tip-box wrong-tip" id="tip2-w">
+                    <p>❌ 错误！非正规校园贷是“高利贷”陷阱，会产生高额违约金，还会遭遇暴力催收，严重影响个人征信和校园生活！</p>
+                </div>
+                <div class="tip-box correct-tip" id="tip2-c">
+                    <p>✅ 正确！学校严禁非正规校园贷，有资金困难应及时向家人、辅导员求助，树立理性消费观，远离一切非正规借贷～</p>
+                </div>
+            </div>
+
+            <!-- 场景3：游戏账号交易 -->
+            <div class="scene" id="scene3" style="display: none;">
+                <h3>场景3：游戏账号交易诈骗</h3>
+                <p>你想卖掉游戏账号，对方说走“私下交易”，让你先把账号密码给他，他验号后转账，你会？</p>
+                <button class="option" data-scene="3" data-ans="wrong">把账号密码给他，验号后转账更靠谱</button>
+                <button class="option" data-scene="3" data-ans="wrong">让对方先转一半定金，再给账号密码</button>
+                <button class="option" data-scene="3" data-ans="correct">拒绝私下交易，走官方正规交易平台，全程不透露账号密码</button>
+                <div class="tip-box wrong-tip" id="tip3-w">
+                    <p>❌ 错误！游戏账号私下交易无保障，骗子拿到账号密码后会立即改密拉黑，定金、转账都是诱骗你的手段！</p>
+                </div>
+                <div class="tip-box correct-tip" id="tip3-c">
+                    <p>✅ 正确！虚拟物品交易必须走官方正规平台，切勿私下透露账号、密码、验证码，保护好自己的账号信息～</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 闯关结果 -->
+        <div id="resultBox">
+            <h2>🎉 反诈闯关成功！</h2>
+            <p>你的反诈段位是：<span id="level">黄金反诈卫士</span></p>
+            <p>你已掌握校园高频诈骗防范技巧，继续保持警惕，守护青春钱包！</p>
+            <p>核心反诈口诀：不轻信、不透露、不转账！</p>
+            <button class="restart-btn" id="restartBtn">重新闯关</button>
+        </div>
+    </div>
+
+    <script>
+        // 获取元素
+        const options = document.querySelectorAll('.option');
+        let currentScene = 1;
+        const totalScenes = 3;
+
+        // 选项点击事件
+        options.forEach(option => {
+            option.addEventListener('click', function() {
+                // 禁止重复点击
+                const sceneId = this.dataset.scene;
+                const scene = document.getElementById(`scene${sceneId}`);
+                const allOptions = scene.querySelectorAll('.option');
+                allOptions.forEach(opt => opt.disabled = true);
+
+                // 获取答案类型
+                const ans = this.dataset.ans;
+                const tipW = document.getElementById(`tip${sceneId}-w`);
+                const tipC = document.getElementById(`tip${sceneId}-c`);
+
+                // 样式和提示
+                this.classList.add(ans);
+                if (ans === 'wrong') {
+                    tipW.style.display = 'block';
+                } else {
+                    tipC.style.display = 'block';
+                }
+
+                // 跳转到下一个场景
+                setTimeout(() => {
+                    if (parseInt(sceneId) < totalScenes) {
+                        document.getElementById(`scene${sceneId}`).style.display = 'none';
+                        currentScene++;
+                        document.getElementById(`scene${currentScene}`).style.display = 'block';
+                    } else {
+                        // 闯关完成
+                        document.getElementById('gameBox').style.display = 'none';
+                        document.getElementById('resultBox').style.display = 'block';
+                        // 随机生成反诈段位（可自定义）
+                        const levels = ['青铜反诈小白', '白银反诈使者', '黄金反诈卫士', '钻石反诈达人', '王者反诈大神'];
+                        const randomLevel = levels[Math.floor(Math.random() * levels.length)];
+                        document.getElementById('level').innerText = randomLevel;
+                    }
+                }, 2000); // 2秒后跳转，留时间看提示
+            });
+        });
+
+        // 重新闯关
+        document.getElementById('restartBtn').addEventListener('click', function() {
+            // 重置所有状态
+            currentScene = 1;
+            document.getElementById('resultBox').style.display = 'none';
+            document.getElementById('gameBox').style.display = 'block';
+            // 重置场景和选项
+            for (let i = 1; i <= totalScenes; i++) {
+                const scene = document.getElementById(`scene${i}`);
+                const tipW = document.getElementById(`tip${i}-w`);
+                const tipC = document.getElementById(`tip${i}-c`);
+                const allOptions = scene.querySelectorAll('.option');
+                scene.style.display = i === 1 ? 'block' : 'none';
+                tipW.style.display = 'none';
+                tipC.style.display = 'none';
+                allOptions.forEach(opt => {
+                    opt.disabled = false;
+                    opt.classList.remove('correct', 'wrong');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
